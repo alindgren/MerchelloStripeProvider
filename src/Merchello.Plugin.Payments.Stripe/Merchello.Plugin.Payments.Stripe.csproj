@@ -215,6 +215,7 @@
     <Compile Include="Provider\StripePaymentGatewayMethod.cs" />
     <Compile Include="Provider\StripePaymentGatewayProvider.cs" />
     <Compile Include="StripeApplicationEventListener.cs" />
+    <Compile Include="StripeHelper.cs" />
     <Compile Include="StripePaymentProcessor.cs" />
     <Compile Include="TransactionMode.cs" />
   </ItemGroup>

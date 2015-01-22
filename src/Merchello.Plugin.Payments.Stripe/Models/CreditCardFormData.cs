@@ -9,6 +9,21 @@ namespace Merchello.Plugin.Payments.Stripe.Models
     public class CreditCardFormData
     {
         /// <summary>
+        /// The Stripe customer id
+        /// </summary>
+        public string StripeCustomerId { get; set; }
+
+        /// <summary>
+        /// The Stripe card id
+        /// </summary>
+        public string StripeCardId { get; set; }
+
+        /// <summary>
+        /// The Stripe card token
+        /// </summary>
+        public string StripeCardToken { get; set; }
+
+        /// <summary>
         /// The type of the credit card.  
         /// </summary>
         public string CreditCardType { get; set; }

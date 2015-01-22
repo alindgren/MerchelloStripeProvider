@@ -3,7 +3,7 @@
 
     <!-- IMPORTS -->
     <PropertyGroup>
-        <MSBuildCustomTasksPath>$(MSBuildProjectDirectory)..\..\..\..\..\Tools\MSBuildCommunityTasks</MSBuildCustomTasksPath>
+        <MSBuildCustomTasksPath>$(MSBuildProjectDirectory)..\..\Tools\MSBuildCommunityTasks</MSBuildCustomTasksPath>
         <MSBuildCommunityTasksPath>$(MSBuildCustomTasksPath)</MSBuildCommunityTasksPath>
         <MSBuildUmbracoTasksPath>$(MSBuildCustomTasksPath)</MSBuildUmbracoTasksPath>
     </PropertyGroup>
@@ -16,7 +16,7 @@
         <VersionMajor>1</VersionMajor>
         <VersionMinor>0</VersionMinor>
         <VersionPatch>0</VersionPatch>
-        <VersionSuffix>2</VersionSuffix>
+        <VersionSuffix>3</VersionSuffix>
         <UmbracoVersion>7.1.4</UmbracoVersion>
     </PropertyGroup>
 

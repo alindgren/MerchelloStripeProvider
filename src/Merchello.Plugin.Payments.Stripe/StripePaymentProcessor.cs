@@ -14,7 +14,7 @@ using Umbraco.Core;
 
 namespace Merchello.Plugin.Payments.Stripe
 {
-    internal class StripePaymentProcessor
+    public class StripePaymentProcessor
     {
         private readonly StripeProcessorSettings _settings;
 
@@ -67,39 +67,14 @@ namespace Merchello.Plugin.Payments.Stripe
                             invoice, false);
             }
 
-            var requestParams = new NameValueCollection();
-            requestParams.Add("amount", ConvertAmount(invoice, amount));
-            requestParams.Add("currency", invoice.CurrencyCode());
-            if (transactionMode == TransactionMode.Authorize)
-                requestParams.Add("capture", "false");
-            requestParams.Add("card[number]", creditCard.CardNumber);
-            requestParams.Add("card[exp_month]", creditCard.ExpireMonth);
-            requestParams.Add("card[exp_year]", creditCard.ExpireYear);
-            requestParams.Add("card[cvc]", creditCard.CardCode);
-            requestParams.Add("card[name]", creditCard.CardholderName);
-
-            // Billing address
-            IAddress address = invoice.GetBillingAddress();
-            //requestParams.Add("receipt_email", address.Email); // note: this will send receipt email - maybe there should be a setting controlling if this is passed or not. Email could also be added to metadata
-            requestParams.Add("card[address_line1]", address.Address1);
-            requestParams.Add("card[address_line2]", address.Address2);
-            requestParams.Add("card[address_city]", address.Locality);
-            if (!string.IsNullOrEmpty(address.Region)) requestParams.Add("card[address_state]", address.Region);
-            requestParams.Add("card[address_zip]", address.PostalCode);
-            if (!string.IsNullOrEmpty(address.CountryCode))
-                requestParams.Add("card[address_country]", address.CountryCode);
-            requestParams.Add("metadata[invoice_number]", invoice.PrefixedInvoiceNumber());
-            requestParams.Add("description", string.Format("Full invoice #{0}", invoice.PrefixedInvoiceNumber()));
-
-            string postData =
-                requestParams.AllKeys.Aggregate("",
-                    (current, key) => current + (key + "=" + HttpUtility.UrlEncode(requestParams[key]) + "&"))
-                    .TrimEnd('&');
+            var requestParams = StripeHelper.PreparePostDataForProcessPayment(invoice.GetBillingAddress(), transactionMode,
+                ConvertAmount(invoice, amount), invoice.CurrencyCode(), creditCard, invoice.PrefixedInvoiceNumber(), 
+                string.Format("Full invoice #{0}", invoice.PrefixedInvoiceNumber()));
 
             // https://stripe.com/docs/api#create_charge
             try
             {
-                var response = MakeStripeApiRequest("https://api.stripe.com/v1/charges", "POST", requestParams);
+                var response = StripeHelper.MakeStripeApiRequest("https://api.stripe.com/v1/charges", "POST", requestParams, _settings);
                 return GetProcessPaymentResult(invoice, payment, response);
             }
             catch (WebException ex)
@@ -155,7 +130,7 @@ namespace Merchello.Plugin.Payments.Stripe
             string url = string.Format("https://api.stripe.com/v1/charges/{0}/capture", stripeChargeId);
             try
             {
-                var response = MakeStripeApiRequest(url, "POST", null);
+                var response = StripeHelper.MakeStripeApiRequest(url, "POST", null, _settings);
                 return GetCapturePaymentResult(invoice, payment, response);
             }
             catch (WebException ex)
@@ -208,7 +183,7 @@ namespace Merchello.Plugin.Payments.Stripe
             string url = string.Format("https://api.stripe.com/v1/charges/{0}/refunds", stripeChargeId);
             var requestParams = new NameValueCollection();
             requestParams.Add("amount", ConvertAmount(invoice, amount));
-            var response = MakeStripeApiRequest(url, "POST", requestParams);
+            var response = StripeHelper.MakeStripeApiRequest(url, "POST", requestParams, _settings);
             return GetRefundPaymentResult(invoice, payment, response);
         }
 
@@ -250,41 +225,8 @@ namespace Merchello.Plugin.Payments.Stripe
                             new InvalidOperationException("Payment is not Authorized or Stripe charge id not present")),
                         invoice, false);
             string url = string.Format("https://api.stripe.com/v1/charges/{0}/refunds", stripeChargeId);
-            var response = MakeStripeApiRequest(url, "POST", null);
+            var response = StripeHelper.MakeStripeApiRequest(url, "POST", null, _settings);
             return GetRefundPaymentResult(invoice, payment, response);
-        }
-
-        private HttpWebResponse MakeStripeApiRequest(string apiUrl, string httpMethod,
-            NameValueCollection requestParameters)
-        {
-            string postData = requestParameters == null
-                ? ""
-                : requestParameters.AllKeys.Aggregate("",
-                    (current, key) => current + (key + "=" + HttpUtility.UrlEncode(requestParameters[key]) + "&"))
-                    .TrimEnd('&');
-
-            var request = (HttpWebRequest) WebRequest.Create(apiUrl);
-            request.Method = httpMethod;
-            request.ContentLength = postData.Length;
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.Headers.Add("Authorization", BasicAuthToken(_settings.ApiKey));
-            request.Headers.Add("Stripe-Version", ApiVersion);
-            request.UserAgent = "Merchello (https://github.com/Merchello/Merchello)";
-            if (requestParameters != null)
-            {
-                using (var writer = new StreamWriter(request.GetRequestStream()))
-                {
-                    writer.Write(postData);
-                }
-            }
-
-            return (HttpWebResponse) request.GetResponse();
-        }
-
-        private static string BasicAuthToken(string apiKey)
-        {
-            string token = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:", apiKey)));
-            return string.Format("Basic {0}", token);
         }
 
         /// <summary>
