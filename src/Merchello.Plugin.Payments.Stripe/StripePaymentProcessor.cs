@@ -237,7 +237,15 @@ namespace Merchello.Plugin.Payments.Stripe
         {
             switch (currencyCode)
             {
-                case "USD": // TODO: add other valid codes
+                // TODO: add other valid codes
+                case "GBP": // British Pound
+                case "DOP": // Dominican Peso
+                case "USD": // US Dollar
+                case "CAD": // Canadian Dollar
+                case "EUR": // Euro
+                case "NIO": // Nicaraguan Córdoba
+                case "DKK": // Danish Krone
+                case "PEN": // Peruvian Nuevo Sol
                     return true;
             }
             return IsZeroDecimalCurrency(currencyCode);
