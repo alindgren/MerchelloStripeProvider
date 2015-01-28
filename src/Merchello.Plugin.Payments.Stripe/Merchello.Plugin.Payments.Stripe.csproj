@@ -204,16 +204,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Caching\CacheKeys.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Exceptions\StripeApiException.cs" />
     <Compile Include="ExtendedDataExtensions.cs" />
+    <Compile Include="Gateways\CustomerGateway.cs" />
+    <Compile Include="Gateways\GatewayResult.cs" />
+    <Compile Include="Gateways\StripeGateway.cs" />
+    <Compile Include="Mandate.cs" />
     <Compile Include="Models\CreditCardFormData.cs" />
     <Compile Include="Models\CreditCardInfoExtensions.cs" />
+    <Compile Include="Models\CustomerRequest.cs" />
+    <Compile Include="Models\StripeCustomer.cs" />
     <Compile Include="Models\StripeProcessorSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider\IStripePaymentGatewayMethod.cs" />
     <Compile Include="Provider\IStripePaymentGatewayProvider.cs" />
     <Compile Include="Provider\StripePaymentGatewayMethod.cs" />
     <Compile Include="Provider\StripePaymentGatewayProvider.cs" />
+    <Compile Include="Services\IStripeApiService.cs" />
+    <Compile Include="Services\IStripeCustomerApiService.cs" />
+    <Compile Include="Services\StripeApiRequestFactory.cs" />
+    <Compile Include="Services\StripeApiService.cs" />
+    <Compile Include="Services\StripeApiServiceBase.cs" />
+    <Compile Include="Services\StripeCustomerApiService.cs" />
     <Compile Include="StripeApplicationEventListener.cs" />
     <Compile Include="StripeHelper.cs" />
     <Compile Include="StripePaymentProcessor.cs" />
