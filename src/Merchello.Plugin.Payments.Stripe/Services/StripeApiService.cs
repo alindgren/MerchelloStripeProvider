@@ -24,7 +24,7 @@
 
         internal StripeApiService(IMerchelloContext merchelloContext, StripeProcessorSettings settings)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            //Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(settings, "settings");
 
             this._settings = settings;

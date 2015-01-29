@@ -208,6 +208,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Exceptions\StripeApiException.cs" />
     <Compile Include="ExtendedDataExtensions.cs" />
+    <Compile Include="Gateways\CardGateway.cs" />
     <Compile Include="Gateways\CustomerGateway.cs" />
     <Compile Include="Gateways\GatewayResult.cs" />
     <Compile Include="Gateways\StripeGateway.cs" />

@@ -18,7 +18,7 @@ namespace Merchello.Plugin.Payments.Stripe.Services
         private Lazy<StripeApiRequestFactory> _requestFactory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeApiServiceBase"/> class.
+        /// Initializes a new instance of the <see cref="StripeApiServiceBase"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The <see cref="IMerchelloContext"/>.

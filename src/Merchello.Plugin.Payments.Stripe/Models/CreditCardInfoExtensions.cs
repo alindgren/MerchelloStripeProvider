@@ -4,26 +4,26 @@ namespace Merchello.Plugin.Payments.Stripe.Models
 {
     public static class CreditCardInfoExtensions
     {
-        public static ProcessorArgumentCollection AsProcessorArgumentCollection(this CreditCardFormData creditCard)
+        public static ProcessorArgumentCollection AsProcessorArgumentCollection(this StripeCard creditCard)
         {
             return new ProcessorArgumentCollection()
             {
-                { "creditCardType", creditCard.CreditCardType },
+                { "creditCardType", creditCard.Type },
                 { "cardholderName", creditCard.CardholderName },
-                { "cardNumber", creditCard.CardNumber },
+                { "cardNumber", creditCard.Number },
                 { "expireMonth", creditCard.ExpireMonth },
                 { "expireYear", creditCard.ExpireYear },
                 { "cardCode", creditCard.CardCode }
             };
         }
 
-        public static CreditCardFormData AsCreditCardFormData(this ProcessorArgumentCollection args)
+        public static StripeCard AsCreditCardFormData(this ProcessorArgumentCollection args)
         {
-            return new CreditCardFormData()
+            return new StripeCard()
             {
-                CreditCardType = args.ArgValue("creditCardType"),
+                Type = args.ArgValue("creditCardType"),
                 CardholderName = args.ArgValue("cardholderName"),
-                CardNumber = args.ArgValue("cardNumber"),
+                Number = args.ArgValue("cardNumber"),
                 ExpireMonth = args.ArgValue("expireMonth"),
                 ExpireYear = args.ArgValue("expireYear"),
                 CardCode = args.ArgValue("cardCode")

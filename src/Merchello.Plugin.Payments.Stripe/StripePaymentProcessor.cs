@@ -38,10 +38,10 @@ namespace Merchello.Plugin.Payments.Stripe
         /// <param name="payment">The <see cref="IPayment" /> record</param>
         /// <param name="transactionMode">Authorize or AuthorizeAndCapture</param>
         /// <param name="amount">The money amount to be processed</param>
-        /// <param name="creditCard">The <see cref="CreditCardFormData" /></param>
+        /// <param name="creditCard">The <see cref="StripeCard" /></param>
         /// <returns>The <see cref="IPaymentResult" /></returns>
         public IPaymentResult ProcessPayment(IInvoice invoice, IPayment payment, TransactionMode transactionMode,
-            decimal amount, CreditCardFormData creditCard)
+            decimal amount, StripeCard creditCard)
         {
             if (!IsValidCurrencyCode(invoice.CurrencyCode()))
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception("Invalid currency")), invoice,

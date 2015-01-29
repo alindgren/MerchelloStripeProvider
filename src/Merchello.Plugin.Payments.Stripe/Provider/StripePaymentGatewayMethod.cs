@@ -54,8 +54,8 @@ namespace Merchello.Plugin.Payments.Stripe.Provider
             payment.CustomerKey = invoice.CustomerKey;
             payment.Authorized = false;
             payment.Collected = false;
-            payment.PaymentMethodName = string.Format("{0} Stripe Credit Card", cc.CreditCardType);
-            payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.CcLastFour, cc.CardNumber.Substring(cc.CardNumber.Length - 4, 4).EncryptWithMachineKey());
+            payment.PaymentMethodName = string.Format("{0} Stripe Credit Card", cc.Type);
+            payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.CcLastFour, cc.Number.Substring(cc.Number.Length - 4, 4).EncryptWithMachineKey());
 
             
             var result = _processor.ProcessPayment(invoice, payment, transactionMode, amount, cc);

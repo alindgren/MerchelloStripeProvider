@@ -3,12 +3,12 @@
     using System;
 
     /// <summary>
-    /// The cache keys used in this Braintree plugin
+    /// The cache keys used in this Stripe plugin
     /// </summary>
     internal static class CacheKeys
     {
         /// <summary>
-        /// Cache key to cache a Braintree customer.
+        /// Cache key to cache a Stripe customer.
         /// </summary>
         /// <param name="customerKey">
         /// The customer key.
@@ -22,7 +22,7 @@
         }
 
         /// <summary>
-        /// Cache key to cache a Braintree customer.
+        /// Cache key to cache a Stripe customer.
         /// </summary>
         /// <param name="customerId">
         /// The Stripe customer Id.
@@ -50,7 +50,7 @@
         }
 
         /// <summary>
-        /// Cache key used to cache a Braintree subscription.
+        /// Cache key used to cache a Stripe subscription.
         /// </summary>
         /// <param name="subscriptionId">
         /// The subscription id.

@@ -22,10 +22,10 @@ namespace Merchello.Plugin.Payments.Stripe
         /// <param name="address"></param>
         /// <param name="settings"></param>
         /// <returns></returns>
-        public static string GetCardToken(CreditCardFormData creditCard, IAddress address, StripeProcessorSettings settings)
+        public static string GetCardToken(StripeCard creditCard, IAddress address, StripeProcessorSettings settings)
         {
             var requestParams = new NameValueCollection();
-            requestParams.Add("card[number]", creditCard.CardNumber);
+            requestParams.Add("card[number]", creditCard.Number);
             requestParams.Add("card[exp_month]", creditCard.ExpireMonth);
             requestParams.Add("card[exp_year]", creditCard.ExpireYear);
             requestParams.Add("card[cvc]", creditCard.CardCode);
@@ -70,7 +70,7 @@ namespace Merchello.Plugin.Payments.Stripe
 
         public static NameValueCollection PreparePostDataForProcessPayment(IAddress billingAddress,
             TransactionMode transactionMode,
-            string amount, string currency, CreditCardFormData creditCard, string invoiceNumber, string description)
+            string amount, string currency, StripeCard creditCard, string invoiceNumber, string description)
         {
             var requestParams = new NameValueCollection();
             requestParams.Add("amount", amount);
@@ -78,21 +78,21 @@ namespace Merchello.Plugin.Payments.Stripe
             if (transactionMode == TransactionMode.Authorize)
                 requestParams.Add("capture", "false");
 
-            if (!String.IsNullOrEmpty(creditCard.StripeCustomerId))
+            if (!String.IsNullOrEmpty(creditCard.CustomerId))
             {
-                requestParams.Add("customer", creditCard.StripeCustomerId);
-                if (!String.IsNullOrEmpty(creditCard.StripeCardId))
-                    requestParams.Add("card", creditCard.StripeCardId);
+                requestParams.Add("customer", creditCard.CustomerId);
+                if (!String.IsNullOrEmpty(creditCard.Id))
+                    requestParams.Add("card", creditCard.Id);
             }
             else
             {
-                if (!String.IsNullOrEmpty(creditCard.StripeCardToken))
+                if (!String.IsNullOrEmpty(creditCard.Token))
                 {
-                    requestParams.Add("card", creditCard.StripeCardToken);
+                    requestParams.Add("card", creditCard.Token);
                 }
                 else
                 {
-                    requestParams.Add("card[number]", creditCard.CardNumber);
+                    requestParams.Add("card[number]", creditCard.Number);
                     requestParams.Add("card[exp_month]", creditCard.ExpireMonth);
                     requestParams.Add("card[exp_year]", creditCard.ExpireYear);
                     requestParams.Add("card[cvc]", creditCard.CardCode);

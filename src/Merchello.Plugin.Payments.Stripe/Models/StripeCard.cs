@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Merchello.Plugin.Payments.Stripe.Models
+﻿namespace Merchello.Plugin.Payments.Stripe.Models
 {
-    public class CreditCardFormData
+    public class StripeCard
     {
         /// <summary>
         /// The Stripe customer id
         /// </summary>
-        public string StripeCustomerId { get; set; }
+        public string CustomerId { get; set; }
 
         /// <summary>
         /// The Stripe card id
         /// </summary>
-        public string StripeCardId { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// The Stripe card token
         /// </summary>
-        public string StripeCardToken { get; set; }
+        public string Token { get; set; }
 
         /// <summary>
         /// The type of the credit card.  
         /// </summary>
-        public string CreditCardType { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// The card holders name
@@ -36,7 +30,7 @@ namespace Merchello.Plugin.Payments.Stripe.Models
         /// <summary>
         /// The credit card number
         /// </summary>
-        public string CardNumber { get; set; }
+        public string Number { get; set; }
 
         /// <summary>
         /// The expiration month - format MM
@@ -52,5 +46,13 @@ namespace Merchello.Plugin.Payments.Stripe.Models
         /// The credit card code or CVV
         /// </summary>
         public string CardCode { get; set; }
+
+        // optional properties
+        public string Address1 { get; set; }
+        public string Address2 { get; set; }
+        public string City { get; set; }
+        public string Zip { get; set; }
+        public string State { get; set; }
+        public string Country { get; set; }
     }
 }

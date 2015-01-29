@@ -12,6 +12,11 @@ namespace Merchello.Plugin.Payments.Stripe.Gateways
         /// </summary>
         private Lazy<CustomerGateway> _customer;
 
+        /// <summary>
+        /// The <see cref="CardGateway"/>.
+        /// </summary>
+        private Lazy<CardGateway> _card;
+
         public StripeGateway(StripeProcessorSettings settings)
         {
             _settings = settings;
@@ -27,6 +32,13 @@ namespace Merchello.Plugin.Payments.Stripe.Gateways
         }
 
         /// <summary>
+        /// Gets the card gateway
+        /// </summary>
+        public CardGateway Card
+        {
+            get { return _card.Value; }
+        }
+        /// <summary>
         /// Initializes the object
         /// </summary>
         private void Initialize()
@@ -34,6 +46,10 @@ namespace Merchello.Plugin.Payments.Stripe.Gateways
             if (_customer == null)
                 _customer = new Lazy<CustomerGateway>(() => new CustomerGateway(_settings));
 
+            if (_card == null)
+            {
+                _card = new Lazy<CardGateway>(() => new CardGateway(_settings));
+            }
         }
     }
 }
