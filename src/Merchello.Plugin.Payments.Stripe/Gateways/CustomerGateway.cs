@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlServerCe;
 using System.IO;
 using System.Net;
 using Merchello.Plugin.Payments.Stripe.Exceptions;

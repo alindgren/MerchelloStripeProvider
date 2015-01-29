@@ -1,22 +1,17 @@
-﻿
-
-using System;
+﻿using System;
 using System.Linq;
 using Merchello.Core;
-using Merchello.Plugin.Payments.Stripe.Exceptions;
-using Merchello.Plugin.Payments.Stripe.Gateways;
 using Umbraco.Core.Events;
 
 namespace Merchello.Plugin.Payments.Stripe.Services
 {
     using Models;
     using Umbraco.Core;
-    using Umbraco.Core.Logging;
     using Core.Models;
 
     internal class StripeCustomerApiService : StripeApiServiceBase, IStripeCustomerApiService
     {
-                /// <summary>
+        /// <summary>
         /// Initializes a new instance of the <see cref="StripeCustomerApiService"/> class.
         /// </summary>
         /// <param name="settings">

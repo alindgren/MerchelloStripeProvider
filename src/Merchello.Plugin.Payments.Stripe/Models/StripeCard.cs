@@ -1,4 +1,6 @@
-﻿namespace Merchello.Plugin.Payments.Stripe.Models
+﻿using System.Collections.Specialized;
+
+namespace Merchello.Plugin.Payments.Stripe.Models
 {
     public class StripeCard
     {
@@ -54,5 +56,34 @@
         public string Zip { get; set; }
         public string State { get; set; }
         public string Country { get; set; }
+
+        public NameValueCollection ToNameValueCollection()
+        {
+            var requestParams = new NameValueCollection();
+            if (Number != null)
+                requestParams.Add("number", Number);
+            if (ExpireMonth != null)
+                requestParams.Add("exp_month", ExpireMonth);
+            if (ExpireYear != null)
+                requestParams.Add("exp_year", ExpireYear);
+            if (CardCode != null)
+                requestParams.Add("cvc", CardCode);
+            if (CardholderName != null)
+                requestParams.Add("name", CardholderName);
+            if (Address1 != null)
+                requestParams.Add("address_line1", Address1);
+            if (Address2 != null)
+                requestParams.Add("address_line2", Address2);
+            if (City != null)
+                requestParams.Add("address_city", City);
+            if (State != null)
+                requestParams.Add("address_state", State);
+            if (Zip != null)
+                requestParams.Add("address_zip", Zip);
+            if (Country != null)
+                requestParams.Add("address_country", Country);
+
+            return requestParams;
+        }
     }
 }

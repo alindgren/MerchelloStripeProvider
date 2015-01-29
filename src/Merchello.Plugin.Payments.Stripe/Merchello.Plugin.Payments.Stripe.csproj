@@ -213,7 +213,7 @@
     <Compile Include="Gateways\GatewayResult.cs" />
     <Compile Include="Gateways\StripeGateway.cs" />
     <Compile Include="Mandate.cs" />
-    <Compile Include="Models\CreditCardFormData.cs" />
+    <Compile Include="Models\StripeCard.cs" />
     <Compile Include="Models\CreditCardInfoExtensions.cs" />
     <Compile Include="Models\CustomerRequest.cs" />
     <Compile Include="Models\StripeCustomer.cs" />

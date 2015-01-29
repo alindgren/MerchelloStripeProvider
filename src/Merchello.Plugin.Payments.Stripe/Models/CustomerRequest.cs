@@ -1,5 +1,4 @@
 ﻿using System.Collections.Specialized;
-using System.Security.Cryptography;
 
 namespace Merchello.Plugin.Payments.Stripe.Models
 {
