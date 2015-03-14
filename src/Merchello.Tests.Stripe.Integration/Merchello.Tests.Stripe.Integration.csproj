@@ -212,6 +212,7 @@
     <Compile Include="TestHelpers\Resolution.cs" />
     <Compile Include="TestHelpers\SqlSyntaxProviderTestHelper.cs" />
     <Compile Include="Tests\AuthorizationTests.cs" />
+    <Compile Include="Tests\CustomerTests.cs" />
     <Compile Include="Tests\ProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>

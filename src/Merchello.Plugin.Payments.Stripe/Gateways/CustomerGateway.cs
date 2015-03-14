@@ -54,5 +54,12 @@ namespace Merchello.Plugin.Payments.Stripe.Gateways
 
             return result;
         }
+
+        public GatewayResult<StripeCustomer> Find(string stripcCustomerId)
+        {
+            var result = new GatewayResult<StripeCustomer>();
+
+            return result;
+        }
     }
 }

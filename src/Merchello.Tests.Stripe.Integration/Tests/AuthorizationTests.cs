@@ -81,11 +81,11 @@ namespace Merchello.Tests.Stripe.Integration.Tests
             var creditCardMethod = Provider.GetPaymentGatewayMethodByPaymentCode("CreditCard");
             Assert.NotNull(creditCardMethod);
 
-            var ccEntry = new CreditCardFormData()
+            var ccEntry = new StripeCard()
             {
-                CreditCardType = "VISA",
+                Type = "VISA",
                 CardholderName = "Alex Lindgren",
-                CardNumber = "4012888888881881",
+                Number = "4012888888881881",
                 CardCode = "111",
                 ExpireMonth = "09",
                 ExpireYear = "15"
@@ -107,11 +107,11 @@ namespace Merchello.Tests.Stripe.Integration.Tests
             var creditCardMethod = Provider.GetPaymentGatewayMethodByPaymentCode("CreditCard");
             Assert.NotNull(creditCardMethod);
 
-            var ccEntry = new CreditCardFormData()
+            var ccEntry = new StripeCard()
             {
-                CreditCardType = "VISA",
+                Type = "VISA",
                 CardholderName = "Alex Lindgren",
-                CardNumber = "1234123412341234",
+                Number = "1234123412341234",
                 CardCode = "111",
                 ExpireMonth = "09",
                 ExpireYear = "15"
@@ -137,11 +137,11 @@ namespace Merchello.Tests.Stripe.Integration.Tests
             var creditCardMethod = Provider.GetPaymentGatewayMethodByPaymentCode("CreditCard");
             Assert.NotNull(creditCardMethod);
 
-            var ccEntry = new CreditCardFormData()
+            var ccEntry = new StripeCard()
             {
-                CreditCardType = "VISA",
+                Type = "VISA",
                 CardholderName = "Alex Lindgren",
-                CardNumber = "4012888888881881",
+                Number = "4012888888881881",
                 CardCode = "111",
                 ExpireMonth = "09",
                 ExpireYear = "15"
@@ -168,11 +168,11 @@ namespace Merchello.Tests.Stripe.Integration.Tests
             var creditCardMethod = Provider.GetPaymentGatewayMethodByPaymentCode("CreditCard");
             Assert.NotNull(creditCardMethod);
 
-            var ccEntry = new CreditCardFormData()
+            var ccEntry = new StripeCard()
             {
-                CreditCardType = "VISA",
+                Type = "VISA",
                 CardholderName = "Alex Lindgren",
-                CardNumber = "4012888888881881",
+                Number = "4012888888881881",
                 CardCode = "111",
                 ExpireMonth = "09",
                 ExpireYear = "15"
