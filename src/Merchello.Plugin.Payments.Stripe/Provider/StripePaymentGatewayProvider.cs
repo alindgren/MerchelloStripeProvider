@@ -60,7 +60,8 @@ namespace Merchello.Plugin.Payments.Stripe.Provider
                 return new StripePaymentGatewayMethod(GatewayProviderService, attempt.Result, GatewayProviderSettings.ExtendedData);
             }
 
-            LogHelper.Error<StripePaymentGatewayProvider>(string.Format("Failed to create a payment method name: {0}, description {1}, paymentCode {2}", name, description, available.ServiceCode), attempt.Exception);
+            LogHelper.Error<StripePaymentGatewayProvider>(
+                $"Failed to create a payment method name: {name}, description {description}, paymentCode {available.ServiceCode}", attempt.Exception);
 
             throw attempt.Exception;
         }

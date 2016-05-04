@@ -24,14 +24,6 @@ namespace Merchello.Plugin.Payments.Stripe
         }
 
         /// <summary>
-        ///     The Stripe API version
-        /// </summary>
-        public static string ApiVersion
-        {
-            get { return "2014-06-17"; }
-        }
-
-        /// <summary>
         ///     Processes the Authorize and AuthorizeAndCapture transactions
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice" /> to be paid</param>
@@ -68,8 +60,8 @@ namespace Merchello.Plugin.Payments.Stripe
             }
 
             var requestParams = StripeHelper.PreparePostDataForProcessPayment(invoice.GetBillingAddress(), transactionMode,
-                ConvertAmount(invoice, amount), invoice.CurrencyCode(), creditCard, invoice.PrefixedInvoiceNumber(), 
-                string.Format("Full invoice #{0}", invoice.PrefixedInvoiceNumber()));
+                ConvertAmount(invoice, amount), invoice.CurrencyCode(), creditCard, invoice.PrefixedInvoiceNumber(),
+                $"Full invoice #{invoice.PrefixedInvoiceNumber()}");
 
             // https://stripe.com/docs/api#create_charge
             try
@@ -86,20 +78,20 @@ namespace Merchello.Plugin.Payments.Stripe
         private static string ConvertAmount(IInvoice invoice, decimal amount)
         {
             // need to convert non-zero-decimal currencies
-            bool isZeroDecimalCurrency = IsZeroDecimalCurrency(invoice.CurrencyCode());
-            decimal stripeAmountDecimal = isZeroDecimalCurrency ? amount : (amount*100);
+            var isZeroDecimalCurrency = IsZeroDecimalCurrency(invoice.CurrencyCode());
+            var stripeAmountDecimal = isZeroDecimalCurrency ? amount : (amount*100);
             return Convert.ToInt32(stripeAmountDecimal).ToString(CultureInfo.InvariantCulture);
         }
 
         private static IPaymentResult GetProcessPaymentResult(IInvoice invoice, IPayment payment,
             HttpWebResponse response)
         {
-            string apiResponse = null;
+            string apiResponse;
             using (var reader = new StreamReader(response.GetResponseStream()))
             {
                 apiResponse = reader.ReadToEnd();
             }
-            JObject responseJson = JObject.Parse(apiResponse);
+            var responseJson = JObject.Parse(apiResponse);
 
             switch (response.StatusCode)
             {
@@ -114,20 +106,20 @@ namespace Merchello.Plugin.Payments.Stripe
                     return
                         new PaymentResult(
                             Attempt<IPayment>.Fail(payment,
-                                new Exception(string.Format("{0}", responseJson["error"]["message"]))), invoice, false);
+                                new Exception($"{responseJson["error"]["message"]}")), invoice, false);
 
                 default:
                     return
                         new PaymentResult(
                             Attempt<IPayment>.Fail(payment,
-                                new Exception(string.Format("{0}", "Stripe unknown error"))), invoice, false);
+                                new Exception($"{"Stripe unknown error"}")), invoice, false);
             }
         }
 
         public IPaymentResult PriorAuthorizeCapturePayment(IInvoice invoice, IPayment payment)
         {
-            string stripeChargeId = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.StripeChargeId);
-            string url = string.Format("https://api.stripe.com/v1/charges/{0}/capture", stripeChargeId);
+            var stripeChargeId = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.StripeChargeId);
+            var url = $"https://api.stripe.com/v1/charges/{stripeChargeId}/capture";
             try
             {
                 var response = StripeHelper.MakeStripeApiRequest(url, "POST", null, _settings);
@@ -143,12 +135,12 @@ namespace Merchello.Plugin.Payments.Stripe
         private static IPaymentResult GetCapturePaymentResult(IInvoice invoice, IPayment payment,
             HttpWebResponse response)
         {
-            string apiResponse = null;
+            string apiResponse;
             using (var reader = new StreamReader(response.GetResponseStream()))
             {
                 apiResponse = reader.ReadToEnd();
             }
-            JObject responseJson = JObject.Parse(apiResponse);
+            var responseJson = JObject.Parse(apiResponse);
 
             switch (response.StatusCode)
             {
@@ -162,39 +154,38 @@ namespace Merchello.Plugin.Payments.Stripe
                     return
                         new PaymentResult(
                             Attempt<IPayment>.Fail(payment,
-                                new Exception(string.Format("{0}", responseJson["error"]["message"]))), invoice, false);
+                                new Exception($"{responseJson["error"]["message"]}")), invoice, false);
                 default:
                     return
                         new PaymentResult(
                             Attempt<IPayment>.Fail(payment,
-                                new Exception(string.Format("{0}", "Stripe unknown error"))), invoice, false);
+                                new Exception($"{"Stripe unknown error"}")), invoice, false);
             }
         }
 
         public IPaymentResult RefundPayment(IInvoice invoice, IPayment payment, decimal amount)
         {
-            string stripeChargeId = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.StripeChargeId);
+            var stripeChargeId = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.StripeChargeId);
             if (!payment.Authorized || string.IsNullOrEmpty(stripeChargeId))
                 return
                     new PaymentResult(
                         Attempt<IPayment>.Fail(payment,
                             new InvalidOperationException("Payment is not Authorized or Stripe charge id not present")),
                         invoice, false);
-            string url = string.Format("https://api.stripe.com/v1/charges/{0}/refunds", stripeChargeId);
-            var requestParams = new NameValueCollection();
-            requestParams.Add("amount", ConvertAmount(invoice, amount));
+            var url = $"https://api.stripe.com/v1/charges/{stripeChargeId}/refunds";
+            var requestParams = new NameValueCollection {{"amount", ConvertAmount(invoice, amount)}};
             var response = StripeHelper.MakeStripeApiRequest(url, "POST", requestParams, _settings);
             return GetRefundPaymentResult(invoice, payment, response);
         }
 
         private IPaymentResult GetRefundPaymentResult(IInvoice invoice, IPayment payment, HttpWebResponse response)
         {
-            string apiResponse = null;
+            string apiResponse;
             using (var reader = new StreamReader(response.GetResponseStream()))
             {
                 apiResponse = reader.ReadToEnd();
             }
-            JObject responseJson = JObject.Parse(apiResponse);
+            var responseJson = JObject.Parse(apiResponse);
 
             switch (response.StatusCode)
             {
@@ -205,26 +196,26 @@ namespace Merchello.Plugin.Payments.Stripe
                     return
                         new PaymentResult(
                             Attempt<IPayment>.Fail(payment,
-                                new Exception(string.Format("Error {0}", responseJson["message"]))), invoice, false);
+                                new Exception($"Error {responseJson["message"]}")), invoice, false);
                 default:
                     return
                         new PaymentResult(
                             Attempt<IPayment>.Fail(payment,
-                                new Exception(string.Format("Error {0}", "Stripe unknown error"))), invoice, false);
+                                new Exception($"Error {"Stripe unknown error"}")), invoice, false);
             }
         }
 
         public IPaymentResult VoidPayment(IInvoice invoice, IPayment payment)
         {
             // Stripe does not seem to have a Void method, so we do a full refund
-            string stripeChargeId = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.StripeChargeId);
+            var stripeChargeId = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.StripeChargeId);
             if (!payment.Authorized || string.IsNullOrEmpty(stripeChargeId))
                 return
                     new PaymentResult(
                         Attempt<IPayment>.Fail(payment,
                             new InvalidOperationException("Payment is not Authorized or Stripe charge id not present")),
                         invoice, false);
-            string url = string.Format("https://api.stripe.com/v1/charges/{0}/refunds", stripeChargeId);
+            var url = $"https://api.stripe.com/v1/charges/{stripeChargeId}/refunds";
             var response = StripeHelper.MakeStripeApiRequest(url, "POST", null, _settings);
             return GetRefundPaymentResult(invoice, payment, response);
         }
