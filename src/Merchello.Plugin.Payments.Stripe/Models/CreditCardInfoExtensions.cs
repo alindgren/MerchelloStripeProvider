@@ -8,6 +8,7 @@ namespace Merchello.Plugin.Payments.Stripe.Models
         {
             return new ProcessorArgumentCollection()
             {
+                { "cardToken", creditCard.StripeCardToken },
                 { "creditCardType", creditCard.CreditCardType },
                 { "cardholderName", creditCard.CardholderName },
                 { "cardNumber", creditCard.CardNumber },
@@ -21,6 +22,7 @@ namespace Merchello.Plugin.Payments.Stripe.Models
         {
             return new CreditCardFormData()
             {
+                StripeCardToken = args.ArgValue("cardToken"),
                 CreditCardType = args.ArgValue("creditCardType"),
                 CardholderName = args.ArgValue("cardholderName"),
                 CardNumber = args.ArgValue("cardNumber"),
